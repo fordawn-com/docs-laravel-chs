@@ -1,23 +1,23 @@
 # Contribution Guide
 
-- [Bug Reports](#bug-reports)
-- [Core Development Discussion](#core-development-discussion)
-- [Which Branch?](#which-branch)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [Coding Style](#coding-style)
+- [错误报告](#bug-reports)
+- [核心开发讨论](#core-development-discussion)
+- [哪个分支？](#which-branch)
+- [安全漏洞](#security-vulnerabilities)
+- [编码风格](#coding-style)
     - [PHPDoc](#phpdoc)
     - [StyleCI](#styleci)
 
 <a name="bug-reports"></a>
-## Bug Reports
+## 错误报告
 
-To encourage active collaboration, Laravel strongly encourages pull requests, not just bug reports. "Bug reports" may also be sent in the form of a pull request containing a failing test.
+为了鼓励促进更加有效积极的合作，Laravel 强烈鼓励使用 GitHub 的 pull requests，而不是仅仅报告错误，“错误报告”也可以通过一个包含失败测试的 pull requests 的方式提交。
 
-However, if you file a bug report, your issue should contain a title and a clear description of the issue. You should also include as much relevant information as possible and a code sample that demonstrates the issue. The goal of a bug report is to make it easy for yourself - and others - to replicate the bug and develop a fix.
+然而，如果你以文件的方式提交缺陷报告，你的问题应该包含一个标题和对该问题的明确说明，还要包含尽可能多的相关信息以及论证该问题的代码示例，错误报告的目的是为了让你自己和 - 其他人 - 更方便的重现错误并对其进行修复。
 
-Remember, bug reports are created in the hope that others with the same problem will be able to collaborate with you on solving it. Do not expect that the bug report will automatically see any activity or that others will jump to fix it. Creating a bug report serves to help yourself and others start on the path of fixing the problem.
+记住，错误报告被创建是为了其他人遇到同样问题的时候能够和你一起合作解决它，不要寄期望于错误会自动解决或有人跳出来修复它，创建错误报告是为了帮你自己和别人走上修复问题之路。
 
-The Laravel source code is managed on Github, and there are repositories for each of the Laravel projects:
+Laravel 源码通过 Github 进行管理，每一个 Laravel 项目都有其对应的代码库：
 
 - [Laravel Framework](https://github.com/laravel/framework)
 - [Laravel Application](https://github.com/laravel/laravel)
@@ -31,37 +31,37 @@ The Laravel source code is managed on Github, and there are repositories for eac
 - [Laravel Art](https://github.com/laravel/art)
 
 <a name="core-development-discussion"></a>
-## Core Development Discussion
+## 核心开发讨论
 
-You may propose new features or improvements of existing Laravel behavior in the Laravel Internals [issue board](https://github.com/laravel/internals/issues). If you propose a new feature, please be willing to implement at least some of the code that would be needed to complete the feature.
+你可以在 [issue board](https://github.com/laravel/internals/issues) 上提出新功能或者改进已有功能，如果是新功能的话请至少实现部分代码以便完成新功能开发。
 
-Informal discussion regarding bugs, new features, and implementation of existing features takes place in the `#internals` channel of the [LaraChat](http://larachat.co) Slack team. Taylor Otwell, the maintainer of Laravel, is typically present in the channel on weekdays from 8am-5pm (UTC-06:00 or America/Chicago), and sporadically present in the channel at other times.
+你也可以在 [LaraChat](http://larachat.co) 的 Slack 小组的 `#internals` 频道讨论关于 Laravel 的 bugs、新特性、以及现有功能的实现等。Taylor Otwell，Laravel 的主要维护者，通常在工作日的上午8点到下午5点（西六区或美国芝加哥时间）在线，其它时间也可能偶尔在线。
 
 <a name="which-branch"></a>
-## Which Branch?
+## 哪个分支？
 
-**All** bug fixes should be sent to the latest stable branch or to the current LTS branch (5.1). Bug fixes should **never** be sent to the `master` branch unless they fix features that exist only in the upcoming release.
+**所有**的 bug 修复应该被提交到最新的稳定分支，或者 LTS 分支(5.1)，**永远不要**把 bug 修复提交到 master 分支，除非它们能够修复下个发行版本中的特性。
 
-**Minor** features that are **fully backwards compatible** with the current Laravel release may be sent to the latest stable branch.
+当前版本中**完全向后兼容**的**次要**特性也可以提交到最新的稳定分支。
 
-**Major** new features should always be sent to the `master` branch, which contains the upcoming Laravel release.
+**重要**的新特性总是要被提交到 `master` 分支，包括下个发行版本。
 
-If you are unsure if your feature qualifies as a major or minor, please ask Taylor Otwell in the `#internals` channel of the [LaraChat](http://larachat.co) Slack team.
+如果你不确定是重要特性还是次要特性，请在 Slack 小组 [LaraChat](http://larachat.co) 的 `#internals` 频道咨询 Taylor Otwell。
 
 <a name="security-vulnerabilities"></a>
-## Security Vulnerabilities
+## 安全漏洞
 
-If you discover a security vulnerability within Laravel, please send an email to Taylor Otwell at <a href="mailto:taylor@laravel.com">taylor@laravel.com</a>. All security vulnerabilities will be promptly addressed.
+如果你在 Laravel 中发现安全漏洞，请发送邮件到 <a href="mailto:taylor@laravel.com">taylor@laravel.com</a>，所有的安全漏洞将会被及时解决。
 
 <a name="coding-style"></a>
-## Coding Style
+## 编码风格
 
-Laravel follows the [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) coding standard and the [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md) autoloading standard.
+Laravel遵循 [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) 编码标准和 [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md) 自动载入标准。
 
 <a name="phpdoc"></a>
 ### PHPDoc
 
-Below is an example of a valid Laravel documentation block. Note that the `@param` attribute is followed by two spaces, the argument type, two more spaces, and finally the variable name:
+下面是一个有效的Laravel文档区块示例，注意到 `@param` 属性后面有两个空格，然后是参数类型，接着又是两个空格，最后是参数名称：
 
     /**
      * Register a binding with the container.
@@ -79,4 +79,4 @@ Below is an example of a valid Laravel documentation block. Note that the `@para
 <a name="styleci"></a>
 ### StyleCI
 
-Don't worry if your code styling isn't perfect! [StyleCI](https://styleci.io/) will automatically merge any style fixes into the Laravel repository after pull requests are merged. This allows us to focus on the content of the contribution and not the code style.
+如果你的代码格式不是很完美，不必担心，[StyleCI](https://styleci.io/) 会在提交代码时自动为我们修正代码风格以保持和Laravel仓库代码一致，从而让我们更加专注于代码内容而非风格。
