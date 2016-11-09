@@ -1,4 +1,4 @@
-# Errors & Logging
+# 错误 & 日志
 
 - [Introduction](#introduction)
 - [Configuration](#configuration)
