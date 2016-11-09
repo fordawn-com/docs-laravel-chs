@@ -23,7 +23,7 @@
     - [控制器 (Controllers)](/laravel/{{version}}/controllers)
     - [请求 (Requests)](/laravel/{{version}}/requests)
     - [响应 (Responses)](/laravel/{{version}}/responses)
-    - [Session (Session)](/laravel/{{version}}/session)
+    - [会话 (Session)](/laravel/{{version}}/session)
     - [验证 (Validation)](/laravel/{{version}}/validation)
 - 视图 & 模板 (Views & Templates)
     - [视图 (Views)](/laravel/{{version}}/views)
