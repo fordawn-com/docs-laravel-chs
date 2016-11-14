@@ -1,29 +1,29 @@
-# Events
+# 事件
 
-- [Introduction](#introduction)
-- [Registering Events & Listeners](#registering-events-and-listeners)
-    - [Generating Events & Listeners](#generating-events-and-listeners)
-    - [Manually Registering Events](#manually-registering-events)
-- [Defining Events](#defining-events)
-- [Defining Listeners](#defining-listeners)
-- [Queued Event Listeners](#queued-event-listeners)
-    - [Manually Accessing The Queue](#manually-accessing-the-queue)
-- [Firing Events](#firing-events)
-- [Event Subscribers](#event-subscribers)
-    - [Writing Event Subscribers](#writing-event-subscribers)
-    - [Registering Event Subscribers](#registering-event-subscribers)
+- [简介](#introduction)
+- [注册事件 & 监听器](#registering-events-and-listeners)
+    - [生成事件 & 监听器类](#generating-events-and-listeners)
+    - [手动注册事件](#manually-registering-events)
+- [定义事件](#defining-events)
+- [定义监听器](#defining-listeners)
+- [事件监听器队列](#queued-event-listeners)
+    - [手动访问队列](#manually-accessing-the-queue)
+- [触发事件](#firing-events)
+- [事件订阅者](#event-subscribers)
+    - [编写事件订阅者](#writing-event-subscribers)
+    - [注册事件订阅者](#registering-event-subscribers)
 
 <a name="introduction"></a>
-## Introduction
+## 简介
 
-Laravel's events provides a simple observer implementation, allowing you to subscribe and listen for various events that occur in your application. Event classes are typically stored in the `app/Events` directory, while their listeners are stored in `app/Listeners`. Don't worry if you don't see these directories in your application, since they will be created for you as you generate events and listeners using Artisan console commands.
+Laravel 事件提供了简单的观察者模式实现，允许你订阅和监听应用中的事件。事件类通常存放在 `app/Events` 目录，监听器存放在 `app/Listeners`。如果你在应用中没有看到这些目录，不要担心，因为它们会在你使用Artisan命令生成事件和监听器的时候创建。
 
-Events serve as a great way to decouple various aspects of your application, since a single event can have multiple listeners that do not depend on each other. For example, you may wish to send a Slack notification to your user each time an order has shipped. Instead of coupling your order processing code to your Slack notification code, you can simply raise an `OrderShipped` event, which a listener can receive and transform into a Slack notification.
+事件为应用功能模块解耦提供了行之有效的办法，因为单个事件可以有多个监听器而这些监听器之间并不相互依赖。例如，你可能想要在每次订单发送时给用户发送一个Slack通知，有了事件之后，你大可不必将订单处理代码和Slack通知代码耦合在一起，而只需要简单触发一个可以被监听器接收并处理为Slack通知的 `OrderShipped` 事件即可。
 
 <a name="registering-events-and-listeners"></a>
-## Registering Events & Listeners
+## 注册事件 & 监听器
 
-The `EventServiceProvider` included with your Laravel application provides a convenient place to register all of your application's event listeners. The `listen` property contains an array of all events (keys) and their listeners (values). Of course, you may add as many events to this array as your application requires. For example, let's add a `OrderShipped` event:
+Laravel 自带的 `EventServiceProvider` 为事件监听器注册提供了方便之所。其中的 `listen` 属性包含了事件（键）和对应监听器（值）数组。如果应用需要，你可以添加多个事件到该数组。例如，让我们添加一个 `OrderShipped` 事件：
 
     /**
      * The event listener mappings for the application.
@@ -37,16 +37,16 @@ The `EventServiceProvider` included with your Laravel application provides a con
     ];
 
 <a name="generating-events-and-listeners"></a>
-### Generating Events & Listeners
+### 生成事件 & 监听器类
 
-Of course, manually creating the files for each event and listener is cumbersome. Instead, simply add listeners and events to your `EventServiceProvider` and use the `event:generate` command. This command will generate any events or listeners that are listed in your `EventServiceProvider`. Of course, events and listeners that already exist will be left untouched:
+当然，手动为每个事件和监听器创建文件是很笨重的，取而代之地，我们可见简单添加监听器和事件到 `EventServiceProvider`  然后使用 `event:generate` 命令。该命令将会生成罗列在 `EventServiceProvider` 中的所有事件和监听器。当然，已存在的事件和监听器不会被重复创建：
 
     php artisan event:generate
 
 <a name="manually-registering-events"></a>
-### Manually Registering Events
+### 手动注册事件
 
-Typically, events should be registered via the `EventServiceProvider` `$listen` array; however, you may also register Closure based events manually in the `boot` method of your `EventServiceProvider`:
+通常，我们需要通过 `EventServiceProvider` 的 `$listen` 数组注册事件，此外，你还可以在 `EventServiceProvider` 的 `boot` 方法中手动注册基于闭包的事件：
 
     /**
      * Register any other events for your application.
@@ -62,18 +62,18 @@ Typically, events should be registered via the `EventServiceProvider` `$listen` 
         });
     }
 
-#### Wildcard Event Listeners
+#### 通配符事件监听器
 
-You may even register listeners using the `*` as a wildcard parameter, allowing you to catch multiple events on the same listener. Wildcard listeners receive the entire event data array as a single argument:
+你甚至还可以使用通配符 `*` 来注册监听器，这样就可以通过同一个监听器捕获多个事件。通配符监听器接收整个事件数据数组作为参数：
 
     Event::listen('event.*', function (array $data) {
         //
     });
 
 <a name="defining-events"></a>
-## Defining Events
+## 定义事件
 
-An event class is simply a data container which holds the information related to the event. For example, let's assume our generated `OrderShipped` event receives an [Eloquent ORM](/docs/{{version}}/eloquent) object:
+事件类是一个处理与事件相关的简单数据容器，例如，假设我们生成的 `OrderShipped` 事件接收一个 [Eloquent ORM](/laravel/{{version}}/eloquent) 对象：
 
     <?php
 
@@ -101,12 +101,12 @@ An event class is simply a data container which holds the information related to
         }
     }
 
-As you can see, this event class contains no logic. It is simply a container for the `Order` instance that was purchased. The `SerializesModels` trait used by the event will gracefully serialize any Eloquent models if the event object is serialized using PHP's `serialize` function.
+正如你所看到的，该事件类不包含任何特定逻辑，只是一个存放被购买的 `Order` 对象的容器，如果事件对象被序列化的话，事件使用的 `SerializesModels` trait 将会使用 PHP 的 `serialize` 函数序列化所有 Eloquent 模型。
 
 <a name="defining-listeners"></a>
-## Defining Listeners
+## 定义监听器
 
-Next, let's take a look at the listener for our example event. Event listeners receive the event instance in their `handle` method. The `event:generate` command will automatically import the proper event class and type-hint the event on the `handle` method. Within the `handle` method, you may perform any actions necessary to respond to the event:
+接下来，让我们看看我们的示例事件的监听器，事件监听器在 `handle` 方法中接收事件实例，`event:generate` 命令将会自动在 `handle` 方法中导入合适的事件类和类型提示事件。在 `handle` 方法内，你可以执行任何需要的逻辑以响应事件：
 
     <?php
 
@@ -138,18 +138,18 @@ Next, let's take a look at the listener for our example event. Event listeners r
         }
     }
 
-> {tip} Your event listeners may also type-hint any dependencies they need on their constructors. All event listeners are resolved via the Laravel [service container](/docs/{{version}}/container), so dependencies will be injected automatically.
+> {tip} 你的事件监听器还可以在构造器中类型提示任何需要的依赖，所有事件监听器通过 [服务容器](/laravel/{{version}}/container) 解析，所以依赖会自动注入。
 
-#### Stopping The Propagation Of An Event
+#### 停止事件继续往下传播
 
-Sometimes, you may wish to stop the propagation of an event to other listeners. You may do so by returning `false` from your listener's `handle` method.
+有时候，你希望停止事件被传播到其它监听器，你可以通过从监听器的 `handle` 方法中返回 `false` 来实现。
 
 <a name="queued-event-listeners"></a>
-## Queued Event Listeners
+## 事件监听器队列
 
-Queueing listeners can be beneficial if your listener is going to perform a slow task such as sending an e-mail or making an HTTP request. Before getting started with queued listeners, make sure to [configure your queue](/docs/{{version}}/queues) and start a queue listener on your server or local development environment.
+如果监听器将要执行耗时任务比如发送邮件或者发送HTTP请求，那么将监听器放到队列是一个不错的选择。在队列化监听器之前，确保已经 [配置好队列](/laravel/{{version}}/queues) 并且在服务器或本地环境启动一个队列监听器。
 
-To specify that a listener should be queued, add the `ShouldQueue` interface to the listener class. Listeners generated by the `event:generate` Artisan command already have this interface imported into the current namespace, so you can use it immediately:
+要指定某个监听器需要放到队列，只需要让监听器类实现 `ShouldQueue` 接口即可，通过 Artisan 命令 `event:generate`  生成的监听器类已经将接口导入当前命名空间，所以你可以直接拿来使用：
 
     <?php
 
@@ -163,12 +163,12 @@ To specify that a listener should be queued, add the `ShouldQueue` interface to 
         //
     }
 
-That's it! Now, when this listener is called for an event, it will be automatically queued by the event dispatcher using Laravel's [queue system](/docs/{{version}}/queues). If no exceptions are thrown when the listener is executed by the queue, the queued job will automatically be deleted after it has finished processing.
+就是这么简单！当这个监听器被调用的时候，将会使用 Laravel 的 [队列系统](/laravel/{{version}}/queues) 通过事件分发器自动推送到队列。如果通过队列执行监听器的时候没有抛出任何异常，队列任务会在执行完成后被自动删除。
 
 <a name="manually-accessing-the-queue"></a>
-### Manually Accessing The Queue
+### 手动访问队列
 
-If you need to manually access the listener's underlying queue job's `delete` and `release` methods, you may do so using the `Illuminate\Queue\InteractsWithQueue` trait. This trait is imported by default on generated listeners and provides access to these methods:
+如果你需要手动访问底层队列任务的 `delete` 和 `release` 方法，在生成的监听器中默认导入的 `Illuminate\Queue\InteractsWithQueue` trait 为此提供了访问这两个方法的权限：
 
     <?php
 
@@ -191,9 +191,9 @@ If you need to manually access the listener's underlying queue job's `delete` an
     }
 
 <a name="firing-events"></a>
-## Firing Events
+## 触发事件
 
-To fire an event, you may pass an instance of the event to the `event` helper. The helper will dispatch the event to all of its registered listeners. Since the `event` helper is globally available, you may call it from anywhere in your application:
+要触发一个事件，可以传递事件实例到辅助函数 `event`，这个辅助函数会分发事件到所有注册的监听器。由于辅助函数 `event` 全局有效，所以可以在应用的任何地方调用它：
 
     <?php
 
@@ -221,15 +221,15 @@ To fire an event, you may pass an instance of the event to the `event` helper. T
         }
     }
 
-> {tip} When testing, it can be helpful to assert that certain events were fired without actually triggering their listeners. Laravel's [built-in testing helpers](/docs/{{version}}/mocking#mocking-events) makes it a cinch.
+> {tip} 测试的时候，只需要断言特定事件被触发，无需真正触发监听器，Laravel内置的 [测试函数](/laravel/{{version}}/mocking#mocking-events) 让这一实现不在话下。
 
 <a name="event-subscribers"></a>
-## Event Subscribers
+## 事件订阅者
 
 <a name="writing-event-subscribers"></a>
-### Writing Event Subscribers
+### 编写事件订阅者
 
-Event subscribers are classes that may subscribe to multiple events from within the class itself, allowing you to define several event handlers within a single class. Subscribers should define a `subscribe` method, which will be passed an event dispatcher instance. You may call the `listen` method on the given dispatcher to register event listeners:
+事件订阅者是指那些在类本身中订阅多个事件的类，通过事件订阅者你可以在单个类中定义多个事件处理器。订阅者需要定义一个 `subscribe` 方法，该方法中传入一个事件分发器实例。你可以在给定的分发器中调用 `listen` 方法注册事件监听器：
 
     <?php
 
@@ -268,9 +268,9 @@ Event subscribers are classes that may subscribe to multiple events from within 
     }
 
 <a name="registering-event-subscribers"></a>
-### Registering Event Subscribers
+### 注册事件订阅者
 
-After writing the subscriber, you are ready to register it with the event dispatcher. You may register subscribers using the `$subscribe` property on the `EventServiceProvider`. For example, let's add the `UserEventSubscriber` to the list:
+编写好订阅者之后，就可以通过事件分发器对订阅者注册，你可以使用 `EventServiceProvider` 提供的 `$subcribe` 属性来注册订阅者。例如，让我们添加 `UserEventSubscriber`：
 
     <?php
 
